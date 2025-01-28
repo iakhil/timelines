@@ -22,7 +22,7 @@ const MIN_GAP = 50;       // minimum pixels between items
 
 async function getInventionDate(item) {
     try {
-        const response = await fetch('/api/invention-date', {
+        const response = await fetch('https://timelines-a8se.onrender.com/api/invention-date', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
