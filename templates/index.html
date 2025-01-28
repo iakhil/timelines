@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historical Timeline Comparator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        .loading {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Historical Timeline Comparator</h1>
+        <p class="description">Compare the timeline of various inventions</p>
+        
+        <div class="input-section">
+            <input type="text" id="itemInput" placeholder="Enter an item (e.g., Mobile phone)">
+            <button onclick="addItem()">Add to Timeline</button>
+        </div>
+
+        <div class="timeline-container">
+            <div id="timeline" class="timeline">
+                <!-- Timeline items will be added here -->
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html> 
