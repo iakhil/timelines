@@ -75,6 +75,7 @@ function createTimelineItem(item, year) {
     const timeline = document.getElementById('timeline');
     const timelineItem = document.createElement('div');
     timelineItem.className = 'timeline-item';
+    timelineItem.dataset.year = year;  // Store the year for scaling
 
     const timelineContent = document.createElement('div');
     timelineContent.className = 'timeline-content';
@@ -91,37 +92,13 @@ function createTimelineItem(item, year) {
     timelineItem.appendChild(timelineContent);
     timeline.appendChild(timelineItem);
 
-    // Sort timeline items
-    sortTimelineItems();
-}
-
-function sortTimelineItems() {
-    const timeline = document.getElementById('timeline');
-    const items = Array.from(timeline.children);
-    
-    items.sort((a, b) => {
-        const textA = a.querySelector('.timeline-date').textContent;
-        const textB = b.querySelector('.timeline-date').textContent;
-        
-        // Extract year and era (BCE/CE)
-        const [yearA, eraA] = textA.split(' ');
-        const [yearB, eraB] = textB.split(' ');
-        
-        // Convert to comparable numbers
-        const valueA = eraA === 'BCE' ? -parseInt(yearA) : parseInt(yearA);
-        const valueB = eraB === 'BCE' ? -parseInt(yearB) : parseInt(yearB);
-        
-        return valueA - valueB;
-    });
-
-    // Clear timeline and append sorted items
-    timeline.innerHTML = '';
-    items.forEach(item => timeline.appendChild(item));
+    // Sort and position timeline items
+    updateTimelineScale();
 }
 
 function updateTimelineScale() {
     const timeline = document.getElementById('timeline');
-    const items = Array.from(timeline.querySelectorAll('.timeline-item'));  // Only get timeline items
+    const items = Array.from(timeline.children);
     
     // First, sort the items
     items.sort((a, b) => {
@@ -139,10 +116,9 @@ function updateTimelineScale() {
     const timelineHeight = Math.max(yearRange * SCALE_FACTOR, items.length * MIN_GAP);
     timeline.style.height = `${timelineHeight}px`;
 
-    // Remove old scale markers
-    const oldMarkers = timeline.querySelectorAll('.timeline-scale');
-    oldMarkers.forEach(marker => marker.remove());
-
+    // Position items and add scale markers
+    timeline.innerHTML = ''; // Clear existing items and markers
+    
     // Add scale markers every 1000 years or appropriate interval
     const interval = calculateScaleInterval(yearRange);
     for (let year = minYear; year <= maxYear; year += interval) {
@@ -155,7 +131,7 @@ function updateTimelineScale() {
         const year = parseInt(item.dataset.year);
         const position = ((year - minYear) / yearRange) * timelineHeight;
         item.style.top = `${position}px`;
-        timeline.appendChild(item);  // Move item to maintain proper order
+        timeline.appendChild(item);
     });
 }
 
@@ -177,4 +153,9 @@ function createScaleMarker(year, minYear, timelineHeight, maxYear) {
     marker.style.top = `${position}px`;
     
     return marker;
+}
+
+// Update the existing sortTimelineItems function to use updateTimelineScale
+function sortTimelineItems() {
+    updateTimelineScale();
 } 
